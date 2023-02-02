@@ -7,6 +7,9 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "pinia": "^2.0.30",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.2.4",
     "vue": "^3.2.13"
   },
   "devDependencies": {
