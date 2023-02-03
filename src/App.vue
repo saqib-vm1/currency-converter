@@ -28,15 +28,44 @@
 </template>
 
 <script lang="ts" setup>
+  import { ref } from 'vue'
+  import { dollarTo } from './store/constants';
   import SelectInput from './components/SelectInput.vue'
   import SelectOption from './components/SelectOption.vue';
   import Input from './components/Input.vue';
   import { useCurrencyStore } from './store/currencyStore';
   import { storeToRefs } from 'pinia';
+  const { selectValue1, selectValue2, inputValue1, inputValue2, currencies } = storeToRefs(useCurrencyStore());
+  const { updateStore } = useCurrencyStore();
 
-  const { select1, select2, input1, input2, currencies } = storeToRefs(useCurrencyStore());
-  const { handleChange1, handleChange2 } = useCurrencyStore();
-  
+  const select1 = ref(selectValue1.value)
+  const select2 = ref(selectValue2.value)
+  const input1 = ref(inputValue1.value)
+  const input2 = ref(inputValue2.value)
+
+  function handleChange1() {
+      const dollarValue = ((1 / dollarTo[select1.value]) * +input1.value);
+      const currencyValue = (dollarValue * dollarTo[select2.value]).toFixed(2);
+      
+      updateStore({
+        select1: select1.value, 
+        select2: select2.value, 
+        input1: input1.value, 
+        input2: currencyValue
+      })
+    }
+    
+    function handleChange2() {
+      const dollarValue = ((1 / dollarTo[select2.value]) * +input2.value);
+      const currencyValue = (dollarValue * dollarTo[select1.value]).toFixed(2);
+      
+      updateStore({
+        select1: select1.value, 
+        select2: select2.value, 
+        input1: currencyValue, 
+        input2: input2.value
+      })
+    }
 </script>
 
 <style>
