@@ -2,7 +2,7 @@
     <input
         class="py-2 px-4 border w-64 text-2xl font-light text-slate-700" 
         :type="type" 
-        :value="modelValue" @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)" />
+        :value="modelValue" @input="handleInput" />
 </template>
 
 <script lang="ts" setup>
@@ -18,7 +18,12 @@
         }
     })
 
-    defineEmits(['update:modelValue']);
+    const emit = defineEmits(['update:modelValue', 'handleChange']);
+
+    function handleInput(e: Event) {
+        emit('update:modelValue', (e.target as HTMLInputElement).value)
+        emit('handleChange')      
+    }
 
 
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <option class="">{{ label }}</option>
+    <option class="" :value="value">{{ label }}</option>
 </template>
 
 <script lang="ts" setup>
