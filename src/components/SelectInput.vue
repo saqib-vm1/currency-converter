@@ -1,8 +1,9 @@
 <template>
     <select 
         class="border border-slate-500 bg-slate-100 py-2 px-4 outline-none text-gray-700 w-64"
-        :value="modelValue"
+        :value="value"
         @change="handleChange"
+        :name="name"
     >
         <slot></slot>
     </select>
@@ -12,17 +13,20 @@
     import { defineProps, defineEmits, PropType,  } from 'vue';
 
     const props = defineProps({
-        modelValue: {
+        value: {
+            required: true,
+            type: String as PropType<string>
+        },
+        name: {
             required: true,
             type: String as PropType<string>
         }
     })
 
-    const emit = defineEmits(['update:modelValue', 'handleChange'])
+    const emit = defineEmits(['handleChange'])
 
     function handleChange(e: Event) {
-        emit('update:modelValue', (e.target as HTMLInputElement).value);
-        emit('handleChange');
+        emit('handleChange', e);
     }
 </script>
 

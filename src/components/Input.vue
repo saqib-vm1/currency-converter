@@ -2,7 +2,8 @@
     <input
         class="py-2 px-4 border w-64 text-2xl font-light text-slate-700" 
         :type="type" 
-        :value="modelValue" @input="handleInput" />
+        :value="value" @input="handleInput"
+        :name="name" />
 </template>
 
 <script lang="ts" setup>
@@ -12,17 +13,20 @@
         type: {
             type: String as PropType<string>
         },
-        modelValue: {
+        value: {
+            required: true,
+            type: String as PropType<string>
+        },
+        name: {
             required: true,
             type: String as PropType<string>
         }
     })
 
-    const emit = defineEmits(['update:modelValue', 'handleChange']);
+    const emit = defineEmits(['handleChange']);
 
     function handleInput(e: Event) {
-        emit('update:modelValue', (e.target as HTMLInputElement).value)
-        emit('handleChange')      
+        emit('handleChange', e)      
     }
 
 

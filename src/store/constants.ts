@@ -1,4 +1,4 @@
-import Currency from "@/types/currency";
+import { Currency } from "@/types/currency";
 
 export const currenciesList: Currency[] = [
     {label: 'Kuwati Dinar', value: 'kuwatiDinar'},

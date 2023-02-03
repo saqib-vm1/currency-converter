@@ -5,10 +5,10 @@
   <main class="flex justify-center items-center border border-red-100 p-10 w-full max-w-xl mx-auto">
     <!-- Input One -->
     <div>
-      <SelectInput v-model="select1" @handleChange="handleChange1">
+      <SelectInput :value="selectValue1" @handleChange="handleChange" name="select1">
         <SelectOption v-for="currency in currencies" :label="currency.label" :value="currency.value" />
       </SelectInput>
-      <Input type="number" v-model="input1" @handleChange="handleChange1" />    
+      <Input type="number" :value="inputValue1" @handleChange="handleChange" name="input1" />    
     </div>
 
     <!-- Two Way Icon -->
@@ -19,10 +19,10 @@
     
     <!-- Input Two -->
     <div>
-      <SelectInput v-model="select2" @handleChange="handleChange2">
+      <SelectInput :value="selectValue2" @handleChange="handleChange" name="select2">
         <SelectOption v-for="currency in currencies" :label="currency.label" :value="currency.value" />
       </SelectInput>
-      <Input type="number" v-model="input2" @handleChange="handleChange2" />
+      <Input type="number" :value="inputValue2" @handleChange="handleChange" name="input2" />
     </div>
   </main>
 </template>
@@ -33,10 +33,35 @@
   import Input from './components/Input.vue';
   import { useCurrencyStore } from './store/currencyStore';
   import { storeToRefs } from 'pinia';
-
-  const { select1, select2, input1, input2, currencies } = storeToRefs(useCurrencyStore());
-  const { handleChange1, handleChange2 } = useCurrencyStore();
+  import { CurrencyState} from "@/types/currency"
+  import { dollarTo } from './store/constants';
+  const { selectValue1, selectValue2, inputValue1, inputValue2, currencies } = storeToRefs(useCurrencyStore());
+  const { updateState } = useCurrencyStore();
   
+  function handleChange(e: Event) {
+    const target = (e.target as HTMLInputElement);
+    const tempState: CurrencyState = {
+      select1: selectValue1.value,
+      select2: selectValue2.value,
+      input1: inputValue1.value,
+      input2: inputValue2.value
+    }
+    tempState[target.name as keyof typeof tempState] = target.value;
+    // calculating currency value
+    if(target.name === 'select1' || target.name === 'input1') {
+        const dollarValue = ((1 / dollarTo[tempState.select1]) * +tempState.input1);
+        const currencyValue = dollarValue * dollarTo[tempState.select2];
+        
+        tempState.input2 = currencyValue.toFixed(2);
+    } else if(target.name === 'select2' || target.name === 'input2') {
+      const dollarValue = ((1 / dollarTo[tempState.select2]) * +tempState.input2);
+        const currencyValue = dollarValue * dollarTo[tempState.select1];
+        
+        tempState.input1 = currencyValue.toFixed(2);
+    }
+    // updating store
+    updateState(tempState)
+  }
 </script>
 
 <style>

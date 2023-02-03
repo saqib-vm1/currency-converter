@@ -1,32 +1,34 @@
 import { defineStore } from "pinia"
-import { ref  } from 'vue'
-import { dollarTo, currenciesList } from "./constants"
-import Currency from "@/types/currency"
+import { ref, computed, watchEffect, reactive  } from 'vue'
+import { currenciesList } from "./constants"
+import {Currency, CurrencyState} from "@/types/currency"
 
 
 export const useCurrencyStore = defineStore('currency', () => {
     const currencies = ref<Currency[]>(currenciesList)
 
-    const select1 = ref('indianRupee')
-    const select2 = ref('usDollar')
-    const input1 = ref('')
-    const input2 = ref('')
+    const state: CurrencyState = reactive({
+        select1: 'indianRupee',
+        select2: 'usDollar',
+        input1: '',
+        input2: ''
+    })
 
+    const selectValue1 = computed(() => state.select1)
+    const selectValue2 = computed(() => state.select2)
+    const inputValue1 = computed(() => state.input1)
+    const inputValue2 = computed(() => state.input2)
 
-    function handleChange1() {
-        const dollarValue = ((1 / dollarTo[select1.value]) * +input1.value);
-        const currencyValue = dollarValue * dollarTo[select2.value];
-        
-        input2.value = currencyValue.toFixed(2);
+    function updateState(u_State: CurrencyState) {
+        state.select1 = u_State.select1,
+        state.select2 = u_State.select2,
+        state.input1 = u_State.input1,
+        state.input2 = u_State.input2
     }
 
-    function handleChange2() {
-        const dollarValue = ((1 / dollarTo[select2.value]) * +input2.value);
-        const currencyValue = dollarValue * dollarTo[select1.value];
-        
-        input1.value = currencyValue.toFixed(2);
-    }
-    
-    
-    return { select1, select2, input1, input2, currencies, handleChange1, handleChange2 }
+    watchEffect(() => {
+        console.log('watch --------------', state.select1, state.select2, state.input1, state.input2)
+    })
+
+    return { selectValue1, selectValue2, inputValue1, inputValue2, currencies, updateState }
 })
