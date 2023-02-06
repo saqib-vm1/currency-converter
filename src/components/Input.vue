@@ -1,6 +1,6 @@
 <template>
     <input
-        class="py-2 px-4 border w-64 text-2xl font-light text-slate-700" 
+        class="py-2 px-4 border border-gray-500 w-64 text-2xl font-light text-slate-700 dark:bg-slate-900 dark:text-slate-300" 
         :type="type" 
         :value="modelValue" @input="handleInput" />
 </template>

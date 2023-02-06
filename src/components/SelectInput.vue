@@ -1,6 +1,6 @@
 <template>
     <select 
-        class="border border-slate-500 bg-slate-100 py-2 px-4 outline-none text-gray-700 w-64"
+        class="border border-slate-500 bg-slate-100 py-2 px-4 outline-none text-gray-700 w-64 dark:bg-slate-900 dark:text-slate-300"
         :value="modelValue"
         @change="handleChange"
     >
